@@ -1,15 +1,17 @@
 <ivy-module version="2.0">
     <info organisation="com.emergentideas" module="oak_login"/>
-    <configurations defaultconf="build" defaultconfmapping="build->*;deployment->default;test->default">
+    <configurations defaultconfmapping="build->*;deployment->*;test->default">
     	<conf name="build" />
     	<conf name="deployment" />
+    	<conf name="appdep" />
     	<conf name="test" />
     </configurations>
     <publications>
-    	<artifact name="oak_login" type="jar" />
+    	<artifact name="oak_login" type="jar" conf="appdep" />
     </publications>
     <dependencies>
     	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.4" conf="build" />	
+		<dependency org="com.emergentideas" name="crud_tools" rev="[1.0,)" conf="appdep" />
     	
     	<!-- For testing code -->
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.5-rc1" conf="test"/>

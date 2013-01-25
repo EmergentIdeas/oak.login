@@ -11,6 +11,7 @@
 	<property name="artifacts" location="artifacts" />
 	<property name="app.package.root" value="com/emergentideas/webhandle/apps/oak/login" />
 	<property name="organisation" value="com.emergentideas" />
+	<property name="ivylibs" location="ivylibs" />
 	
 	<ivy:settings file="settings.xml" />
 
@@ -31,7 +32,7 @@
 		<mkdir dir="${configuration}" />
 	</target>
 
-	<target name="compile" depends="init" description="compile the source " >
+	<target name="compile" depends="clean,init" description="compile the source " >
 		
 		<ivy:cachepath pathid="ivy.cachepath.dep" conf="deployment"/>
 		<ivy:cachepath pathid="ivy.cachepath.build" conf="build"/>
@@ -82,5 +83,6 @@
 	<target name="clean" description="clean up" >
 		<delete dir="${dist}"/>
 		<delete dir="${artifacts}"/>
+		<delete dir="${ivylibs}"/>
 	</target>
 </project>
