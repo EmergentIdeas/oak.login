@@ -72,6 +72,7 @@
 	
 	<target name="jar" depends="compile">
 		<jar jarfile="${artifacts}/${organisation}-${ant.project.name}.jar" basedir="${dist}"/>
+		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-sources.jar" basedir="${src}" />
 	</target>
 	
 	<target name="pub" depends="jar" >

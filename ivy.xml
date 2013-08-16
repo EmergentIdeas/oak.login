@@ -5,9 +5,11 @@
     	<conf name="deployment" />
     	<conf name="appdep" />
     	<conf name="test" />
+    	<conf name="sources" />
     </configurations>
     <publications>
     	<artifact name="oak_login" type="jar" conf="appdep" />
+    	<artifact name="oak_login-sources" type="source" ext="jar" conf="sources"/>
     </publications>
     <dependencies>
     	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.4" conf="build" />	
