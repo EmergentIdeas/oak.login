@@ -11,6 +11,7 @@
     </publications>
     <dependencies>
     	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.4" conf="build" />	
+		<dependency org="com.emergentideas" name="oak_stdtemplates" rev="[1.0,)" conf="appdep" /> 
 		<dependency org="com.emergentideas" name="crud_tools" rev="[1.0,)" conf="appdep" />
     	
     	<!-- For testing code -->
