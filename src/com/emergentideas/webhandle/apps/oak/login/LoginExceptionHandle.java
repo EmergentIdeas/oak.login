@@ -6,6 +6,7 @@ import com.emergentideas.webhandle.Wire;
 import com.emergentideas.webhandle.assumptions.oak.RequestMessages;
 import com.emergentideas.webhandle.exceptions.UnauthorizedAccessException;
 import com.emergentideas.webhandle.exceptions.UserRequiredException;
+import com.emergentideas.webhandle.output.Show;
 import com.emergentideas.webhandle.output.Template;
 import com.emergentideas.webhandle.output.Wrap;
 
@@ -18,7 +19,13 @@ public class LoginExceptionHandle {
 	@Wrap("public_page")
 	public Object caughtUserRequiredException(Location location, RequestMessages messages, Exception exception) {
 		messages.getInfoMessages().add("It looks like you've got to log in to access that page.");
-		return loginHandle.loginGet(location, ((UserRequiredException)exception).getRequestedURL());
+		messages.persistMessages();
+		
+		
+		String url = ((UserRequiredException)exception).getRequestedURL();
+		
+		
+		return new Show("/login?forward=" + url);
 	}
 	
 	

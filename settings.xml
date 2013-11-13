@@ -15,10 +15,6 @@
 		</filesystem>
 		<chain name="eico-chain">
 			<resolver ref="eico_local" />
-			<url name="com.emergentideas.public">
-				<ivy pattern="https://raw.github.com/EmergentIdeas/ivyrepo/master/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<artifact pattern="https://raw.github.com/EmergentIdeas/ivyrepo/master/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-			</url>
 			<reslover ref="public" />
 			<ibiblio name="ibiblio" m2compatible="true" />
 		</chain>
