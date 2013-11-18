@@ -84,6 +84,12 @@
 
 	</target>
 
+	<!-- deletes this module from the cache so that subsequent publications of the same version will be picked up -->
+	<target name="delcache">
+		<ivy:cachepath pathid="ivy.cachepath.dne" conf="empty"/>
+		<echo message="deleting cache dir: ${ivy.cache.dir}/${organisation}/${ant.project.name}"></echo>
+	  	<delete dir="${ivy.cache.dir}/${organisation}/${ant.project.name}" />
+	</target>
 
 
 	<target name="clean" description="clean up" >

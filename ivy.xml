@@ -6,6 +6,7 @@
     	<conf name="appdep" />
     	<conf name="test" />
     	<conf name="sources" />
+    	<conf name="empty" />
     </configurations>
     <publications>
     	<artifact name="oak_login" type="jar" conf="appdep" />

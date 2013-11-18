@@ -4,7 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -21,10 +24,13 @@ import com.emergentideas.webhandle.assumptions.oak.interfaces.User;
 public class OakAuthenticationService implements AuthenticationService {
 
 	protected EntityManager entityManager;
-	protected String applicationSalt = "vlkNj2!@#34kv.jQ@P#%$4lksdjf132246@^#N$^@4lks@^$%^djlkj4W3lkf";
+	protected transient String applicationSalt = "vlkNj2!@#34kv.jQ@P#%$4lksdjf132246@^#N$^@4lks@^$%^djlkj4W3lkf";
 	protected int numberOfIterations = 10322;
 	
 	protected Logger log = SystemOutLogger.get(OakAuthenticationService.class);
+	
+	// holds the list of all hash calculations made so that they don't need to be made a second time
+	protected transient Map<String, byte[]> hashedCache = Collections.synchronizedMap(new HashMap<String, byte[]>());
 	
 	public User getUserById(String id) {
 		return getUserByProfileName(id);
@@ -190,12 +196,18 @@ public class OakAuthenticationService implements AuthenticationService {
 
 	
 	public byte[] hash(String profileName, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		MessageDigest digest = MessageDigest.getInstance("SHA-512");
-		digest.reset();
-		byte[] input = digest.digest((applicationSalt + profileName + password).getBytes("UTF-8"));
-		for (int i = 0; i < numberOfIterations; i++) {
+		
+		byte[] input = hashedCache.get(password);
+		if(input == null) {
+			MessageDigest digest = MessageDigest.getInstance("SHA-512");
 			digest.reset();
-			input = digest.digest(input);
+			input = digest.digest((applicationSalt + profileName + password).getBytes("UTF-8"));
+			for (int i = 0; i < numberOfIterations; i++) {
+				digest.reset();
+				input = digest.digest(input);
+			}
+			
+			hashedCache.put(password, input);
 		}
 		return input;
 	}
@@ -328,10 +340,11 @@ public class OakAuthenticationService implements AuthenticationService {
 
 	public void setApplicationSalt(String applicationSalt) {
 		this.applicationSalt = applicationSalt;
+		hashedCache.clear();
 	}
 
 	public void setNumberOfIterations(int numberOfIterations) {
 		this.numberOfIterations = numberOfIterations;
 	}
-
+	
 }
