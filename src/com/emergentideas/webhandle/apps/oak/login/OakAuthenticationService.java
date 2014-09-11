@@ -197,7 +197,7 @@ public class OakAuthenticationService implements AuthenticationService {
 	
 	public byte[] hash(String profileName, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		
-		byte[] input = hashedCache.get(password);
+		byte[] input = hashedCache.get(profileName + password);
 		if(input == null) {
 			MessageDigest digest = MessageDigest.getInstance("SHA-512");
 			digest.reset();
@@ -207,7 +207,7 @@ public class OakAuthenticationService implements AuthenticationService {
 				input = digest.digest(input);
 			}
 			
-			hashedCache.put(password, input);
+			hashedCache.put(profileName + password, input);
 		}
 		return input;
 	}

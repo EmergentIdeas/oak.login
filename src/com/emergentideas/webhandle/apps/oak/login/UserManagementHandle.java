@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +19,7 @@ import com.emergentideas.webhandle.assumptions.oak.RequestMessages;
 import com.emergentideas.webhandle.assumptions.oak.dob.tables.TableDataModel;
 import com.emergentideas.webhandle.assumptions.oak.interfaces.AuthenticationService;
 import com.emergentideas.webhandle.assumptions.oak.interfaces.User;
+import com.emergentideas.webhandle.eventbus.EventBus;
 import com.emergentideas.webhandle.handlers.Handle;
 import com.emergentideas.webhandle.handlers.HttpMethod;
 import com.emergentideas.webhandle.output.Show;
@@ -28,6 +30,10 @@ import com.emergentideas.webhandle.output.Wrap;
 public class UserManagementHandle {
 
 	protected AuthenticationService authenticationService;
+	
+	@Resource
+	protected EventBus applicationEventBus;
+
 	
 	@Handle("/groups")
 	@Template
@@ -65,6 +71,7 @@ public class UserManagementHandle {
 		}
 		
 		authenticationService.createGroup(groupName);
+		
 		return new Show("/groups");
 	}
 	
@@ -149,7 +156,10 @@ public class UserManagementHandle {
 			}
 		}
 		
-		
+		if(applicationEventBus != null) {
+			applicationEventBus.emit("/object/update", found);
+		}
+
 		
 		return new Show("/users");
 	}
@@ -158,6 +168,10 @@ public class UserManagementHandle {
 	@Template
 	@Wrap("app_page")
 	public Object deleteUser(String profileName) { 
+		if(applicationEventBus != null) {
+			applicationEventBus.emit("/object/delete", authenticationService.getUserByProfileName(profileName));
+		}
+
 		authenticationService.deleteUser(profileName);
 		return new Show("/users");
 	}
@@ -185,7 +199,7 @@ public class UserManagementHandle {
 			newPassword = CryptoUtils.genNewPassword(12);
 		}
 		
-		authenticationService.createUser(profileName, email, newPassword);
+		User focus = authenticationService.createUser(profileName, email, newPassword);
 		if(StringUtils.isBlank(fullName) == false) {
 			authenticationService.setFullName(profileName, fullName);
 		}
@@ -193,6 +207,11 @@ public class UserManagementHandle {
 		for(String group : assignedGroups) {
 			authenticationService.addMember(group, profileName);
 		}
+		
+		if(applicationEventBus != null) {
+			applicationEventBus.emit("/object/create", focus);
+		}
+
 		return new Show("/users");
 	}
 	
