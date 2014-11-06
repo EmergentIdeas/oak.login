@@ -1,5 +1,8 @@
 package com.emergentideas.webhandle.apps.oak.login;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.emergentideas.webhandle.ExceptionHandler;
 import com.emergentideas.webhandle.Location;
 import com.emergentideas.webhandle.Wire;
@@ -17,7 +20,7 @@ public class LoginExceptionHandle {
 	@ExceptionHandler(UserRequiredException.class)
 	@Template
 	@Wrap("public_page")
-	public Object caughtUserRequiredException(Location location, RequestMessages messages, Exception exception) {
+	public Object caughtUserRequiredException(Location location, RequestMessages messages, Exception exception) throws UnsupportedEncodingException {
 		messages.getInfoMessages().add("It looks like you've got to log in to access that page.");
 		messages.persistMessages();
 		
@@ -25,7 +28,7 @@ public class LoginExceptionHandle {
 		String url = ((UserRequiredException)exception).getRequestedURL();
 		
 		
-		return new Show("/login?forward=" + url);
+		return new Show("/login?forward=" + URLEncoder.encode(url, "UTF-8"));
 	}
 	
 	

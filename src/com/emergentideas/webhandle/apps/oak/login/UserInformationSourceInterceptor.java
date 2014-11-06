@@ -72,7 +72,13 @@ public class UserInformationSourceInterceptor {
 	
 	protected boolean isUserAuthenticated(String name, String password) {
 		if(authenticationService != null) {
-			return authenticationService.isAuthenticated(name, password);
+			try {
+				return authenticationService.isAuthenticated(name, password);
+			}
+			catch(UnsupportedOperationException e) {
+				// May be a problem with there being no db. Just return false
+				return false;
+			}
 		}
 		return false;
 	}
