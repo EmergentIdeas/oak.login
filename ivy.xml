@@ -15,7 +15,7 @@
     <dependencies>
     	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.25" conf="build" />	
 		<dependency org="com.emergentideas" name="oak_stdtemplates" rev="[1.0,)" conf="appdep" /> 
-		<dependency org="com.emergentideas" name="crud_tools" rev="[1.0,)" conf="appdep" />
+		<dependency org="com.emergentideas" name="crud-tools" rev="[1.0,)" conf="build->appdep" />
     	
     	<!-- For testing code -->
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.5-rc1" conf="test"/>
