@@ -1,4 +1,4 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="oak_login" default="pub" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="oak-login" default="pub" basedir=".">
 	<description>
         a build for oak login
     </description>
@@ -8,11 +8,12 @@
 	<property name="resources" location="resources"/>
 	<property name="configuration" location="configuration"/>
 	<property name="dist"  location="dist"/>
+	<property name="javabin"  location="javabin"/>
 	<property name="artifacts" location="artifacts" />
 	<property name="app.package.root" value="com/emergentideas/webhandle/apps/oak/login" />
 	<property name="organisation" value="com.emergentideas" />
 	<property name="ivylibs" location="ivylibs" />
-	
+
 	<ivy:settings file="settings.xml" />
 
 
@@ -26,6 +27,7 @@
 	<target name="init">
 		<property file="buildNumber.properties" />
 		<mkdir dir="${dist}" />
+		<mkdir dir="${javabin}" />
 		<mkdir dir="${artifacts}" />
 		<mkdir dir="${templates}" />
 		<mkdir dir="${resources}" />
@@ -33,7 +35,7 @@
 	</target>
 
 	<target name="compile" depends="clean,init" description="compile the source " >
-		
+
 		<ivy:cachepath pathid="ivy.cachepath.dep" conf="deployment"/>
 		<ivy:cachepath pathid="ivy.cachepath.appdep" conf="appdep"/>
 		<ivy:cachepath pathid="ivy.cachepath.build" conf="build"/>
@@ -42,9 +44,9 @@
 			<path refid="ivy.cachepath.dep" />
 			<path refid="ivy.cachepath.appdep" />
 			<path refid="ivy.cachepath.build" />
-			<fileset dir="lib" >
+			<!-- <fileset dir="lib" >
 				<include name="*.jar"/>
-			</fileset>
+			</fileset> -->
 		</path>
 		<!-- Compile the java code from ${src} into ${dist} -->
 		<javac nowarn="on" srcdir="${src}" destdir="${dist}" target="1.6" source="1.6" debug="true" debuglevel="lines,vars,source">
@@ -57,7 +59,13 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		
+
+		<!-- copy the compiled files to javabin so we can zip these on their own -->
+		<copy todir="${javabin}">
+			<fileset dir="${dist}">
+			</fileset>
+		</copy>
+
 		<copy todir="${dist}/${app.package.root}/templates">
 			<fileset dir="${templates}" >
 			</fileset>
@@ -71,13 +79,17 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="jar" depends="compile">
 		<jar jarfile="${artifacts}/${organisation}-${ant.project.name}.jar" basedir="${dist}"/>
-		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-sources.jar" basedir="${src}" />
+		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-javabin-sources.jar" basedir="${src}" />
+		<jar jarfile="${artifacts}/${organisation}-${ant.project.name}-javabin.jar" basedir="${javabin}" />
+		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-resources.zip" basedir="${resources}" />
+		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-templates.zip" basedir="${templates}" />
+		<zip destfile="${artifacts}/${organisation}-${ant.project.name}-configuration.zip" basedir="${configuration}" />
 	</target>
-	
-	<target name="pub" depends="jar" >
+
+	<target name="pub" depends="delcache,jar" >
 		<ivy:publish resolver="eico_local" pubrevision="1.0.0.${build.number}" update="true" overwrite="true" organisation="${organisation}">
 			<artifacts pattern="${artifacts}/[organisation]-[artifact].[ext]" />
 		</ivy:publish>

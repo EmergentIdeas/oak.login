@@ -10,8 +10,8 @@
 	
 	<resolvers>
 		<filesystem name="eico_local">
-			<ivy pattern="/data/repositories/ivyrepo/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-			<artifact pattern="/data/repositories/ivyrepo/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			<ivy pattern="/data/repo/ivyrepo/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			<artifact pattern="/data/repo/ivyrepo/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 		</filesystem>
 		<chain name="eico-chain">
 			<resolver ref="eico_local" />

@@ -1,25 +1,35 @@
 <ivy-module version="2.0">
-    <info organisation="com.emergentideas" module="oak_login"/>
-    <configurations defaultconfmapping="build->*;deployment->*;test->default">
-    	<conf name="build" />
-    	<conf name="deployment" />
-    	<conf name="appdep" />
-    	<conf name="test" />
-    	<conf name="sources" />
-    	<conf name="empty" />
+	<info organisation="com.emergentideas" module="oak-login"/>
+    <configurations defaultconfmapping="build->*;deployment->default;test->default;deps->default">
+      <conf name="build" />
+      <conf name="deployment" />
+      <conf name="appdep" />
+      <conf name="test" />
+      <conf name="sources" />
+      <conf name="empty" />
+    <conf name="javabin" />
+    <conf name="resources" />
+    <conf name="templates" />
+    <conf name="configuration" />
+    <conf name="deps" />
     </configurations>
     <publications>
-    	<artifact name="oak_login" type="jar" conf="appdep" />
-    	<artifact name="oak_login-sources" type="source" ext="jar" conf="sources"/>
+      <artifact name="oak-login" type="jar" conf="appdep" />
+    <artifact name="oak-login-javabin" type="jar" conf="javabin" />
+      <artifact name="oak-login-javabin-sources" type="source" ext="jar" conf="sources"/>
+    <!-- <artifact name="oak-login-resources" type="zip" conf="resources" /> -->
+    <artifact name="oak-login-templates" type="zip" conf="templates" />
+    <artifact name="oak-login-configuration" type="zip" conf="configuration" />
     </publications>
-    <dependencies>
-    	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.25" conf="build" />	
-		<dependency org="com.emergentideas" name="oak_stdtemplates" rev="[1.0,)" conf="appdep" /> 
+
+	<dependencies>
+    	<dependency org="com.emergentideas" name="webhandle" rev="1.0.0.25" conf="build" />
+		<dependency org="com.emergentideas" name="oak_stdtemplates" rev="[1.0,)" conf="build" />
 		<dependency org="com.emergentideas" name="crud-tools" rev="[1.0,)" conf="build->appdep" />
-    	
+
     	<!-- For testing code -->
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.5-rc1" conf="test"/>
 		<dependency org="junit" name="junit" rev="4.10" conf="test" />
-    	
+
     </dependencies>
 </ivy-module>

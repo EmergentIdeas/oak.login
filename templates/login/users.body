@@ -1,4 +1,4 @@
 <h1>Users</h1>
 __::messages__
 
-__users::dataTables/table__
+__users::crud-tools/dataTables/table__
